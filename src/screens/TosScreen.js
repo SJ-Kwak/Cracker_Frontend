@@ -19,7 +19,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { TextInput } from "react-native-gesture-handler";
 import { Formik } from "formik";
 import * as yup from "yup";
-import Checkbox from "expo-checkbox";
+import CheckBox from '@react-native-community/checkbox';
 import NicknameScreen from "./NicknameScreen";
 
 //import useKeyboardHeight from "react-native-use-keyboard-height";

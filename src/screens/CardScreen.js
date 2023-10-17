@@ -13,7 +13,7 @@ const CardScreen = ({ navigation, route }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       // 화면 전환 코드 작성
-      navigation.navigate("CardPick", { hours: route.params.hours});
+      navigation.navigate("CardPick", { hours: route.params.hours });
     }, 4900); // 5초 후에 실행
 
     // 컴포넌트가 언마운트될 때 타이머를 클리어합니다.

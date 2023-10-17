@@ -1,11 +1,10 @@
 import React, { useEffect, useRef } from "react";
 import styled from "styled-components/native";
-import Carousel from "react-native-carousel-control";
-import Swiper from "react-native-swiper";
 import { Display2 } from "../static/text.js";
 import { asPickerFormat } from "../components/utils.js";
 import { BUTTON_HEIGHT, VIEW_WIDTH } from "../components/values.js";
-import TimePicker from "../components/TImePicker.js";
+// import TimePicker from "../components/TImePicker.js";
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { randomTxt } from "../components/randomTxt.js";
 import { TextPretendard as Text } from "../static/CustomText.js";
 import {
@@ -30,8 +29,7 @@ import { useFocusEffect } from "@react-navigation/native";
 import { Request } from "../api/request";
 import { createStackNavigator } from "@react-navigation/stack";
 import { getItemFromAsync } from "../api/storage.js";
-import * as BackgroundFetch from 'expo-background-fetch';
-import * as TaskManager from 'expo-task-manager';
+import BackgroundFetch from "react-native-background-fetch";
 
 const Stack = createStackNavigator();
 const settingBtn = require("../assets/tch_btnSettings.png");
@@ -50,28 +48,6 @@ const categories = [
   "공연∙전시스탭",
   "기타",
 ];
-
-const BACKGROUND_FETCH_TASK = 'background-fetch';
-TaskManager.defineTask(BACKGROUND_FETCH_TASK, async () => {
-  const now = Date.now();
-
-  console.log(`Got background fetch call at date: ${new Date(now).toISOString()}`);
-
-  // Be sure to return the successful result type!
-  return BackgroundFetch.BackgroundFetchResult.NewData;
-});
-
-async function registerBackgroundFetchAsync() {
-  return BackgroundFetch.registerTaskAsync(BACKGROUND_FETCH_TASK, {
-    minimumInterval: 60 * 0.001, // 15 minutes
-    stopOnTerminate: false, // android only,
-    startOnBoot: true, // android only
-  });
-}
-
-async function unregisterBackgroundFetchAsync() {
-  return BackgroundFetch.unregisterTaskAsync(BACKGROUND_FETCH_TASK);
-}
 
 export default function MainDemo({ navigation }) {
   const [start, setStart] = useState(false);
@@ -240,16 +216,7 @@ export default function MainDemo({ navigation }) {
   const [running1, setRunning1] = useState(false);
   const [running2, setRunning2] = useState(false);
 
-  async function startBackground() {
-    await registerBackgroundFetchAsync();
-  }
-
-  async function stopBackground() {
-    await unregisterBackgroundFetchAsync();
-  }
-
   useEffect(() => {
-    startBackground();
     let interval;
 
     const steps = duringTime * 60; // duringTime에 60을 곱해 총 단계 수를 계산합니다.
@@ -280,7 +247,6 @@ export default function MainDemo({ navigation }) {
   }, [running1, running2, charge, duringTime]);
 
   useEffect(() => {
-    startBackground();
     let interval;
     if (running2) {
       interval = setInterval(() => {
