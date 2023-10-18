@@ -1,5 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
-/* eslint-disable react/react-in-jsx-scope */
 import { TextPretendard as Text } from "./CustomText";
 
 export const Display2 = ({ children }) => {

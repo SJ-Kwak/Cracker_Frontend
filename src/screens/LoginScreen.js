@@ -1,5 +1,3 @@
-//loginscreen.js
-
 import React from "react";
 import styled from "styled-components/native";
 import { TextPretendard as Text } from "../static/CustomText";

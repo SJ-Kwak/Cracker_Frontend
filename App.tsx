@@ -1,4 +1,4 @@
-import { useColorScheme } from "react-native";
+import { useEffect } from "react";
 import { createStackNavigator } from '@react-navigation/stack';
 import { NavigationContainer } from "@react-navigation/native";
 import HomeScreen from "./src/screens/HomeScreen";
@@ -10,8 +10,7 @@ import MainDemo from "./src/screens/MainDemo";
 import SettingScreen from "./src/screens/SettingScreen";
 import AdjNickScreen from "./src/screens/AdjNickScreen";
 import WithdrawScreen from "./src/screens/WithdrawScreen";
-import styled from "styled-components/native";
-import { useFonts } from "expo-font";
+import SplashScreen from "react-native-splash-screen";
 
 import JobNickname from "./src/screens/JobNickname";
 import ChooseJob from "./src/screens/ChooseJob";
@@ -20,17 +19,15 @@ import ChooseMoney from "./src/screens/ChooseMoney";
 
 import CardScreen from "./src/screens/CardScreen";
 import CardPickScreen from "./src/screens/CardPickScreen";
-import React from "react";
-import { Colors, ReloadInstructions, DebugInstructions, LearnMoreLinks } from "react-native/Libraries/NewAppScreen";
 
 const Stack = createStackNavigator();
 
 function App(): JSX.Element {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
+  useEffect(() => {
+    setTimeout(() => {
+      SplashScreen.hide();
+    }, 800);
+  });
 
   return (
     <NavigationContainer>

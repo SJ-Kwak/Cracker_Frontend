@@ -3,7 +3,6 @@ import styled from "styled-components/native";
 import { Display2 } from "../static/text.js";
 import { asPickerFormat } from "../components/utils.js";
 import { BUTTON_HEIGHT, VIEW_WIDTH } from "../components/values.js";
-// import DatePickerAndroid from 'react-native-date-picker'
 import TimePicker from "../components/TImePicker.js";
 import { randomTxt } from "../components/randomTxt.js";
 import { TextPretendard as Text } from "../static/CustomText.js";

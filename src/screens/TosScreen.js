@@ -22,8 +22,6 @@ import * as yup from "yup";
 import CheckBox from '@react-native-community/checkbox';
 import NicknameScreen from "./NicknameScreen";
 
-//import useKeyboardHeight from "react-native-use-keyboard-height";
-
 const Stack = createStackNavigator();
 const backIcon = require("../assets/tch_btnBack.png");
 
