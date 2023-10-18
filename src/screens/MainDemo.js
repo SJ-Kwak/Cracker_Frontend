@@ -3,8 +3,8 @@ import styled from "styled-components/native";
 import { Display2 } from "../static/text.js";
 import { asPickerFormat } from "../components/utils.js";
 import { BUTTON_HEIGHT, VIEW_WIDTH } from "../components/values.js";
-// import TimePicker from "../components/TImePicker.js";
-import DateTimePicker from '@react-native-community/datetimepicker';
+// import DatePickerAndroid from 'react-native-date-picker'
+import TimePicker from "../components/TImePicker.js";
 import { randomTxt } from "../components/randomTxt.js";
 import { TextPretendard as Text } from "../static/CustomText.js";
 import {
@@ -515,8 +515,6 @@ export default function MainDemo({ navigation }) {
           <View>
           <Text
             style={{
-              height: 33,
-              //left: 82,
               top: 130,
               fontWeight: 500,
               fontSize: 28,
@@ -738,6 +736,20 @@ export default function MainDemo({ navigation }) {
                           {convertTime(time1).substr(2, 2)}
                         </Text>
                       </TouchableOpacity>
+                      {/* <DatePickerAndroid
+                        modal
+                        open={startOpen}
+                        mode="time"
+                        date={time1}
+                        onConfirm={(date) => {
+                          setStartOpen(false)
+                          setTime1(time1)
+                        }}
+                        onCancel={() => {
+                          setStartOpen(false)
+                        }}
+                        androidVariant = 'iosClone'
+                      /> */}
                       <Modal
                         transparent={true}
                         visible={startOpen}

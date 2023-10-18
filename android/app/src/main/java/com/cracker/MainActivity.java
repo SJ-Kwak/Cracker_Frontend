@@ -1,4 +1,4 @@
-package com.cracker_frontend;
+package com.cracker;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;
@@ -13,7 +13,7 @@ public class MainActivity extends ReactActivity {
    */
   @Override
   protected String getMainComponentName() {
-    return "Cracker_Frontend";
+    return "cracker";
   }
 
   /**

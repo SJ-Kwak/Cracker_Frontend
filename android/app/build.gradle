@@ -73,9 +73,9 @@ android {
 
     compileSdkVersion rootProject.ext.compileSdkVersion
 
-    namespace "com.cracker_frontend"
+    namespace "com.cracker"
     defaultConfig {
-        applicationId "com.cracker_frontend"
+        applicationId "com.cracker"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1

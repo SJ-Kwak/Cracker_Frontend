@@ -1,4 +1,4 @@
-package com.cracker_frontend;
+package com.cracker;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

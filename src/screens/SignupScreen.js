@@ -322,7 +322,6 @@ const Wrapper = styled.View`
   background-color: white;
   flex: 1;
   height: 100%;
-  // align-items: center;
 `;
 const FormContainer = styled.View`
   padding: 20px;
