@@ -80,7 +80,7 @@ export default function AdjNickScreen({ navigation }) {
                   //position: "absolute",
                   borderBottomColor: values.nickname ? "#6100FF" : "#CCCCCC",
                   borderBottomWidth: values.nickname ? 2 : 1,
-                  fontFamily: "Pretendard",
+                  fontFamily: "PretendardVariable",
                 }}
                 placeholder="1~8자 이하 한글, 영문, 숫자, 특수문자"
                 value={values.nickname}

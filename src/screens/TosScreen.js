@@ -20,7 +20,6 @@ import { TextInput } from "react-native-gesture-handler";
 import { Formik } from "formik";
 import * as yup from "yup";
 import CheckBox from '@react-native-community/checkbox';
-import NicknameScreen from "./NicknameScreen";
 
 const Stack = createStackNavigator();
 const backIcon = require("../assets/tch_btnBack.png");
@@ -95,7 +94,7 @@ export default function TosScreen({ navigation, route }) {
           style={{ flexDirection: "row", alignItems: "center", marginTop: 50 }}
         >
           <Text style={styles.subtitle}>전체 동의합니다.</Text>
-          <Checkbox
+          <CheckBox
             style={{
               position: "absolute",
               right: 2,
@@ -107,13 +106,17 @@ export default function TosScreen({ navigation, route }) {
             value={isChecked1}
             //onValueChange={setChecked1}
             onValueChange={allBtnEvent}
-            color={isChecked1 ? "#E8E6FF" : undefined}
+            // color={isChecked1 ? "#E8E6FF" : undefined}
+            tintColors={{
+              true: "#E8E6FF",
+              false: undefined
+            }}
           />
         </View>
         <View style={{ height: 25 }} />
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Text style={styles.agree} onPress={link1}>서비스 이용약관(필수)</Text>
-          <Checkbox
+          <CheckBox
             style={{
               position: "absolute",
               right: 2,
@@ -125,13 +128,16 @@ export default function TosScreen({ navigation, route }) {
             value={isChecked2}
             //onValueChange={setChecked2}
             onValueChange={BtnEvent1}
-            color={isChecked1 | isChecked2 ? "#E8E6FF" : undefined}
+            tintColors={{
+              true: "#E8E6FF",
+              false: undefined
+            }}
           />
         </View>
         <View style={{ height: 25 }} />
         <View style={{ flexDirection: "row", alignItems: "center" }}>
           <Text style={styles.agree} onPress={link2}>개인정보 수집 및 이용 동의(필수)</Text>
-          <Checkbox
+          <CheckBox
             style={{
               position: "absolute",
               right: 2,
@@ -143,7 +149,10 @@ export default function TosScreen({ navigation, route }) {
             value={isChecked3}
             //onValueChange={setChecked3}
             onValueChange={BtnEvent2}
-            color={isChecked1 | isChecked3 ? "#E8E6FF" : undefined}
+            tintColors={{
+              true: "#E8E6FF",
+              false: undefined
+            }}
           />
         </View>
       </FormContainer>

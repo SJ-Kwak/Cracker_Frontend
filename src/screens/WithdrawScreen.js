@@ -108,7 +108,7 @@ export default function WithdrawScreen({ navigation }) {
                   //position: "absolute",
                   borderBottomColor: values.nickname ? "#6100FF" : "#CCCCCC",
                   borderBottomWidth: values.nickname ? 2 : 1,
-                  fontFamily: 'Pretendard'
+                  fontFamily: "PretendardVariable"
                 }}
                 placeholder="비밀번호 입력"
                 value={values.password}

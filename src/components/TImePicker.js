@@ -235,7 +235,7 @@ const Button = ({ style, label, onPress, color }) => {
   const [focused, setFocused] = React.useState(false);
   const animatedTextStyle = {
     color: color, // 초기 색상 설정
-    fontFamily: "Pretendard",
+    fontFamily: "PretendardVariable",
   };
 
   return (
@@ -302,7 +302,7 @@ const styles = StyleSheet.create({
     fontWeight: Platform.select({ android: "bold", default: "900" }),
     fontSize: 16,
     color: "purple",
-    fontFamily: "Pretendard",
+    fontFamily: "PretendardVariable",
   },
   overlay: {
     alignItems: "center",

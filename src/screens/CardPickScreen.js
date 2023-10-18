@@ -71,7 +71,7 @@ export default function CardPickScreen({ navigation, route }) {
   };
 
   return (
-    <SafeAreaView style={{ marginTop: "15%" }}>
+    <SafeAreaView style={{ marginTop: "5%" }}>
       <TouchableOpacity
         style={{
           marginLeft: "89%",
