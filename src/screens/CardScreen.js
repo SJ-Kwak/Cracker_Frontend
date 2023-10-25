@@ -7,7 +7,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 const Stack = createStackNavigator();
 const CardView = require("../assets/CardView.gif");
-const tempCard = require("../assets/cards/Haedal.png");
 
 const CardScreen = ({ navigation, route }) => {
   useEffect(() => {
@@ -22,7 +21,7 @@ const CardScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-      <Image source={CardView} style={{ width: "100%" }} />
+      <Image source={CardView} style={{alignSelf: "center"}} />
     </SafeAreaView>
   );
 };

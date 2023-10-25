@@ -65,7 +65,7 @@ export default function AdjNickScreen({ navigation }) {
         isValid,
         isSubmitting,
       }) => (
-        <Wrapper>
+        <Wrapper contentContainerStyle={{ alignItems: "center" }}>
           <BackToHome onPress={() => navigation.goBack()}>
             <BackIcon source={backIcon} style={{ width: 40, height: 40 }} />
           </BackToHome>
@@ -102,7 +102,7 @@ export default function AdjNickScreen({ navigation }) {
               backgroundColor:
                 isValid && values.nickname && values.nickname
                   ? "#6100FF"
-                  : "white",
+                  : "transparent",
               //flex: 1,
               //justifyContent: "flex-end",
             }}
@@ -139,10 +139,9 @@ const styles = StyleSheet.create({
   },
 });
 
-const Wrapper = styled.SafeAreaView`
+const Wrapper = styled.ScrollView`
   background-color: white;
   flex: 1;
-  align-items: center;
 `;
 const FormContainer = styled.View`
   padding: 20px;

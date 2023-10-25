@@ -147,6 +147,43 @@ export default function MainDemo({ navigation }) {
     }
   };
 
+  const initBackgroundFetch = async () => {
+    // BackgroundFetch event handler.
+    const onEvent = async (taskId) => {
+      console.log('[BackgroundFetch] task: ', taskId);
+      // Do your background work...
+      await this.addEvent(taskId);
+      // IMPORTANT:  You must signal to the OS that your task is complete.
+      BackgroundFetch.finish(taskId);
+    }
+
+    // Timeout callback is executed when your Task has exceeded its allowed running-time.
+    // You must stop what you're doing immediately BackgroundFetch.finish(taskId)
+    const onTimeout = async (taskId) => {
+      console.warn('[BackgroundFetch] TIMEOUT task: ', taskId);
+      BackgroundFetch.finish(taskId);
+    }
+
+    // Initialize BackgroundFetch only once when component mounts.
+    let status = await BackgroundFetch.configure({minimumFetchInterval: 0.1}, onEvent, onTimeout);
+
+    console.log('[BackgroundFetch] configure status:', status);
+  }
+
+  // Add a BackgroundFetch event to <FlatList>
+  const addEvent = (taskId) => {
+    // Simulate a possibly long-running asynchronous task with a Promise.
+    return new Promise((resolve, reject) => {
+      this.setState(state => ({
+        events: [...state.events, {
+          taskId: taskId,
+          timestamp: (new Date()).toString()
+        }]
+      }));
+      resolve();
+    });
+  }
+
   useFocusEffect(
     useCallback(() => {
       const checkLogin = async () => {
@@ -216,6 +253,7 @@ export default function MainDemo({ navigation }) {
   const [running2, setRunning2] = useState(false);
 
   useEffect(() => {
+    initBackgroundFetch();
     let interval;
 
     const steps = duringTime * 60; // duringTime에 60을 곱해 총 단계 수를 계산합니다.
@@ -232,7 +270,6 @@ export default function MainDemo({ navigation }) {
       if (charge >= 260) {
         setRunning1(false);
         setRunning2(false);
-        stopBackground();
 
         setMainColor("#FFAF15");
         setStartBtnTxt("카드받기");
@@ -246,6 +283,7 @@ export default function MainDemo({ navigation }) {
   }, [running1, running2, charge, duringTime]);
 
   useEffect(() => {
+    initBackgroundFetch();
     let interval;
     if (running2) {
       interval = setInterval(() => {
@@ -254,7 +292,6 @@ export default function MainDemo({ navigation }) {
       if (time >= duringTime * 60 * 1000) {
         setRunning1(false);
         setRunning2(false);
-        stopBackground();
         setMainColor("#FFAF15");
         setStartBtnTxt("카드받기");
         setStartTxt(" 오늘의 \n 알바 완료!");

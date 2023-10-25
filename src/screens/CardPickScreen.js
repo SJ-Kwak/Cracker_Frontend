@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   ImageBackground,
   SafeAreaView,
+  Dimensions
 } from "react-native";
 import { TextPretendard as Text } from "../static/CustomText";
 import { Request } from "../api/request";
@@ -33,6 +34,8 @@ export default function CardPickScreen({ navigation, route }) {
   const xBtn = require("../assets/tch_btnX.png");
   const request = new Request();
   const [firstWord, setFirstWord] = useState("");
+
+  const { width, height } = Dimensions.get('window')
 
   function extractNumberWithUnit(sentence) {
     // 정규 표현식. 실수, 단위 명사 추출
@@ -71,10 +74,11 @@ export default function CardPickScreen({ navigation, route }) {
   };
 
   return (
-    <SafeAreaView style={{ marginTop: "5%" }}>
+    <SafeAreaView>
       <TouchableOpacity
         style={{
-          marginLeft: "89%",
+          alignSelf: "flex-end",
+          margin: 15,
           width: 30,
           height: 30,
         }}
@@ -85,30 +89,31 @@ export default function CardPickScreen({ navigation, route }) {
         style={{
           fontSize: 24,
           fontWeight: "600",
-          marginLeft: "5%",
-          marginTop: "10%",
+          margin: "5%"
         }}>
         {workTime + " 일하는 동안..."}
       </Text>
       <View
         style={{
-          marginTop: "7%",
+          marginTop: "5%",
           flex: 1,
           width: "100%",
           alignItems: "center",
         }}>
-        {selectedPhoto && <Image source={selectedPhoto} resizeMode="cover" />}
-        <Text
-          style={{
-            position: "absolute",
-            top: 140,
-            left: "20%",
-            fontSize: 24,
-            fontWeight: "600",
-            color: "#6100FF",
-          }}>
-          {times}
-        </Text>
+        {selectedPhoto && 
+          <ImageBackground source={selectedPhoto} style={{ width: width, height: height * 0.8}}>
+            <Text
+              style={{
+                fontSize: 24,
+                fontWeight: "600",
+                color: "#6100FF",
+                marginTop: 150,
+                marginLeft: 90
+              }}>
+              {times}
+            </Text>
+          </ImageBackground>
+        }
       </View>
       <View>
         <Image />
