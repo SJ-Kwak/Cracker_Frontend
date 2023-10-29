@@ -21,7 +21,7 @@ const CardScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-      <Image source={CardView} style={{alignSelf: "center"}} />
+      <Image source={CardView} style={{alignSelf: "center", width: '100%', height: '100%'}} />
     </SafeAreaView>
   );
 };
