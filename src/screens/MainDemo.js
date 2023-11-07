@@ -22,13 +22,15 @@ import {
   Modal,
   Dimensions,
   ImageBackground,
+  AppState,
+  AppStateStatus
 } from "react-native";
 import { useState, useContext, useCallback } from "react";
 import { useFocusEffect } from "@react-navigation/native";
 import { Request } from "../api/request";
 import { createStackNavigator } from "@react-navigation/stack";
 import { getItemFromAsync } from "../api/storage.js";
-import BackgroundFetch from "react-native-background-fetch";
+import BackgroundTimer from 'react-native-background-timer';
 
 const Stack = createStackNavigator();
 const settingBtn = require("../assets/tch_btnSettings.png");
@@ -147,43 +149,6 @@ export default function MainDemo({ navigation }) {
     }
   };
 
-  const initBackgroundFetch = async () => {
-    // BackgroundFetch event handler.
-    const onEvent = async (taskId) => {
-      console.log('[BackgroundFetch] task: ', taskId);
-      // Do your background work...
-      await this.addEvent(taskId);
-      // IMPORTANT:  You must signal to the OS that your task is complete.
-      BackgroundFetch.finish(taskId);
-    }
-
-    // Timeout callback is executed when your Task has exceeded its allowed running-time.
-    // You must stop what you're doing immediately BackgroundFetch.finish(taskId)
-    const onTimeout = async (taskId) => {
-      console.warn('[BackgroundFetch] TIMEOUT task: ', taskId);
-      BackgroundFetch.finish(taskId);
-    }
-
-    // Initialize BackgroundFetch only once when component mounts.
-    let status = await BackgroundFetch.configure({minimumFetchInterval: 0.1}, onEvent, onTimeout);
-
-    console.log('[BackgroundFetch] configure status:', status);
-  }
-
-  // Add a BackgroundFetch event to <FlatList>
-  const addEvent = (taskId) => {
-    // Simulate a possibly long-running asynchronous task with a Promise.
-    return new Promise((resolve, reject) => {
-      this.setState(state => ({
-        events: [...state.events, {
-          taskId: taskId,
-          timestamp: (new Date()).toString()
-        }]
-      }));
-      resolve();
-    });
-  }
-
   useFocusEffect(
     useCallback(() => {
       const checkLogin = async () => {
@@ -252,15 +217,30 @@ export default function MainDemo({ navigation }) {
   const [running1, setRunning1] = useState(false);
   const [running2, setRunning2] = useState(false);
 
+  const appState = useRef(AppState.currentState);
+
+  const handleAppStateChange = (nextAppState: AppStateStatus) => {
+    if (appState.current.match(/inactive|background/) && nextAppState === 'active') {
+      console.log('foreground 전환');
+    } else {
+      console.log('background 전환');
+      setRunning1(true);
+      setRunning2(true);
+      console.log('runnnn', running1, running2)
+    }
+
+    appState.current = nextAppState;
+  };
+
   useEffect(() => {
-    initBackgroundFetch();
+    const appStateListener = AppState.addEventListener('change', handleAppStateChange);
     let interval;
 
     const steps = duringTime * 60; // duringTime에 60을 곱해 총 단계 수를 계산합니다.
     const stepSize = 260 / steps; // 각 단계별 증가량을 계산합니다.
 
     if (running1) {
-      interval = setInterval(() => {
+      interval = BackgroundTimer.setTimeout(() => {
         setCharge(charge => {
           const updatedCharge = charge + stepSize;
           return updatedCharge >= 260 ? 260 : updatedCharge; // charge가 260보다 크면 260으로 설정하여 꽉 찬 상태로 유지합니다.
@@ -277,16 +257,19 @@ export default function MainDemo({ navigation }) {
         createWorkHistory();
       }
     } else {
-      clearInterval(interval);
+      BackgroundTimer.clearInterval(interval);
     }
-    return () => clearInterval(interval);
-  }, [running1, running2, charge, duringTime]);
+    return () => {
+      appStateListener.remove();
+      BackgroundTimer.clearInterval(interval);
+    }
+  }, [appState.current, running1, running2, charge, duringTime]);
 
   useEffect(() => {
-    initBackgroundFetch();
+    const appStateListener = AppState.addEventListener('change', handleAppStateChange);
     let interval;
     if (running2) {
-      interval = setInterval(() => {
+      interval = BackgroundTimer.setInterval(() => {
         setTime(prevTime => prevTime + 1000);
       }, 1000);
       if (time >= duringTime * 60 * 1000) {
@@ -297,10 +280,31 @@ export default function MainDemo({ navigation }) {
         setStartTxt(" 오늘의 \n 알바 완료!");
       }
     } else {
-      clearInterval(interval);
+      BackgroundTimer.clearInterval(interval);
     }
-    return () => clearInterval(interval);
-  }, [running1, running2, time, duringTime]);
+    return () => {
+      appStateListener.remove();
+      BackgroundTimer.clearInterval(interval);
+    }
+  }, [appState.current, running1, running2, time, duringTime]);
+
+  // useEffect(() => {
+  //   const appStateListener = AppState.addEventListener('change', handleAppStateChange);
+
+  //   // 여기서 BackgroundTimer로 타이머 설정 및 실행
+  //   const backgroundTimerId = BackgroundTimer.setInterval(() => {
+  //     if (running2) {
+  //       setTime(prevTime => prevTime + 1000);
+  //     }
+  //   }, 1000);
+
+  //   return () => {
+  //     appStateListener.remove();
+
+  //     // 백그라운드 타이머 정리
+  //     BackgroundTimer.clearInterval(backgroundTimerId);
+  //   };
+  // }, []);
 
   const scrollViewRef = useRef(null);
 
@@ -458,6 +462,7 @@ export default function MainDemo({ navigation }) {
       scheduleList: await handleTime(),
     });
     if (response.status === 200) {
+      console.log(response.data)
       closeModal();
     }
   };
