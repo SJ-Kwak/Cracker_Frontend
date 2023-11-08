@@ -2,23 +2,29 @@ import React, { Component } from "react";
 import styled from "styled-components/native";
 
 import { StyleSheet, Text, View, Image, SafeAreaView } from "react-native";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+import { useFocusEffect } from "@react-navigation/native";
+import FastImage from 'react-native-fast-image';
 
 const Stack = createStackNavigator();
 const CardView = require("../assets/CardView.gif");
 
 const CardScreen = ({ navigation, route }) => {
-  useEffect(() => {
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     navigation.navigate("CardPick", { hours: route.params.hours });
+  //   }, 5000);
+  // }, []);
+  useFocusEffect(useCallback(() => {
     setTimeout(() => {
-      // 화면 전환 코드 작성
       navigation.navigate("CardPick", { hours: route.params.hours });
-    }, 4900); // 5초 후에 실행
-  }, []); // useEffect를 한 번만 실행하도록 빈 배열을 전달합니다.
+    }, 5000);
+  }, []));
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-      <Image source={CardView} style={{alignSelf: "center", width: '100%', height: '100%'}} />
+      <FastImage source={CardView} style={{alignSelf: "center", width: '100%', height: '100%'}} />
     </SafeAreaView>
   );
 };

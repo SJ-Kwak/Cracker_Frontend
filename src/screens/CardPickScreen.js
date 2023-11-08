@@ -43,7 +43,7 @@ export default function CardPickScreen({ navigation, route }) {
 
     if (match) {
       // 문자열로 병합
-      const number = match[1];
+      const number = Number(match[1]).toFixed(2);
       const unit = match[2].charAt(0);
       return `${number}${unit}`;
     } else {
@@ -65,13 +65,6 @@ export default function CardPickScreen({ navigation, route }) {
   useEffect(() => {
     getCard();
   }, []);
-
-  const handleRandomPhoto = () => {
-    const randomIndex = Math.floor(Math.random() * cards.length);
-    const randomPhoto = cards[randomIndex].source;
-    setSelectedPhoto(randomPhoto);
-    setIndex(randomIndex);
-  };
 
   return (
     <SafeAreaView>

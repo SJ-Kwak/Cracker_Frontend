@@ -226,11 +226,19 @@ export default function MainDemo({ navigation }) {
       console.log('background 전환');
       setRunning1(true);
       setRunning2(true);
-      console.log('runnnn', running1, running2)
     }
 
     appState.current = nextAppState;
   };
+
+  const finishWork = () => {
+    setRunning1(false);
+    setRunning2(false);
+    setMainColor("#FFAF15");
+    setStartBtnTxt("카드받기");
+    setStartTxt(" 오늘의 \n 알바 완료!");
+    createWorkHistory();
+  }
 
   useEffect(() => {
     const appStateListener = AppState.addEventListener('change', handleAppStateChange);
@@ -247,14 +255,8 @@ export default function MainDemo({ navigation }) {
         });
       }, 1000); // 타이머가 duringTime에 맞춰 charge를 채우도록 설정
 
-      if (charge >= 260) {
-        setRunning1(false);
-        setRunning2(false);
-
-        setMainColor("#FFAF15");
-        setStartBtnTxt("카드받기");
-        setStartTxt(" 오늘의 \n 알바 완료!");
-        createWorkHistory();
+      if (charge > 260) {
+        finishWork();
       }
     } else {
       BackgroundTimer.clearInterval(interval);
@@ -273,11 +275,7 @@ export default function MainDemo({ navigation }) {
         setTime(prevTime => prevTime + 1000);
       }, 1000);
       if (time >= duringTime * 60 * 1000) {
-        setRunning1(false);
-        setRunning2(false);
-        setMainColor("#FFAF15");
-        setStartBtnTxt("카드받기");
-        setStartTxt(" 오늘의 \n 알바 완료!");
+        finishWork();
       }
     } else {
       BackgroundTimer.clearInterval(interval);
@@ -287,24 +285,6 @@ export default function MainDemo({ navigation }) {
       BackgroundTimer.clearInterval(interval);
     }
   }, [appState.current, running1, running2, time, duringTime]);
-
-  // useEffect(() => {
-  //   const appStateListener = AppState.addEventListener('change', handleAppStateChange);
-
-  //   // 여기서 BackgroundTimer로 타이머 설정 및 실행
-  //   const backgroundTimerId = BackgroundTimer.setInterval(() => {
-  //     if (running2) {
-  //       setTime(prevTime => prevTime + 1000);
-  //     }
-  //   }, 1000);
-
-  //   return () => {
-  //     appStateListener.remove();
-
-  //     // 백그라운드 타이머 정리
-  //     BackgroundTimer.clearInterval(backgroundTimerId);
-  //   };
-  // }, []);
 
   const scrollViewRef = useRef(null);
 
@@ -770,20 +750,6 @@ export default function MainDemo({ navigation }) {
                           {convertTime(time1).substr(2, 2)}
                         </Text>
                       </TouchableOpacity>
-                      {/* <DatePickerAndroid
-                        modal
-                        open={startOpen}
-                        mode="time"
-                        date={time1}
-                        onConfirm={(date) => {
-                          setStartOpen(false)
-                          setTime1(time1)
-                        }}
-                        onCancel={() => {
-                          setStartOpen(false)
-                        }}
-                        androidVariant = 'iosClone'
-                      /> */}
                       <Modal
                         transparent={true}
                         visible={startOpen}
