@@ -26,7 +26,7 @@ import { Request } from "../api/request";
 const Stack = createStackNavigator();
 const backIcon = require("../assets/tch_btnBack.png");
 
-export default function SettingScreen({ navigation }) {
+export default function SettingScreen({ navigation, route }) {
   //const keyboardHeight = useKeyboardHeight();
   const request = new Request();
   const [accessToken, setAccessToken] = useState(
@@ -35,6 +35,7 @@ export default function SettingScreen({ navigation }) {
   const [refreshToken, setRefreshToken] = useState(
     getItemFromAsync("refreshToken")
   );
+  const {running1, resetStatus} = route.params;
 
   const link1 = () => {
     Linking.openURL(
@@ -48,13 +49,36 @@ export default function SettingScreen({ navigation }) {
     );
   };
 
+  const logoutConfirmAlert = () => {
+    if (running1) {
+      Alert.alert(
+        "알림",
+        "로그아웃하시면 현재 시급 계산이 멈춥니다.\n로그아웃하시겠습니까?",
+        [
+          {
+            text: "예",
+            onPress: logout,
+            style: "destructive",
+          },
+          {
+            text: "아니오",
+            style: "cancel",
+          },
+        ],
+        { cancelable: false }
+      )
+    } else {
+      logout()
+    }
+  }
+
   const logout = async () => {
     const response = await request.post("/accounts/logout", {
       accessToken: await getItemFromAsync("accessToken"),
       refreshToken: await getItemFromAsync("refreshToken"),
     });
     if (response.status == 200) {
-      // clearItemsFromAsync();
+      resetStatus();
       removeItemFromAsync("accessToken");
       removeItemFromAsync("refreshToken");
       navigation.navigate("Home");
@@ -89,8 +113,8 @@ export default function SettingScreen({ navigation }) {
       <Text style={styles.menu} onPress={link2}>개인정보처리방침</Text>
       <Text style={styles.menu} onPress={link1}>서비스 이용약관</Text>
       <Text style={styles.menu} onPress={() => {}}>오픈 소스 라이선스</Text>
-      <Text style={styles.menu} onPress={() => navigation.navigate("Withdraw")}>회원 탈퇴하기</Text>
-      <Text style={styles.menu} onPress={logout}>로그아웃</Text>
+      <Text style={styles.menu} onPress={() => navigation.navigate("Withdraw", { resetStatus })}>회원 탈퇴하기</Text>
+      <Text style={styles.menu} onPress={logoutConfirmAlert}>로그아웃</Text>
     </Wrapper>
   );
 }

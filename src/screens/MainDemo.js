@@ -54,20 +54,20 @@ export default function MainDemo({ navigation }) {
   const [start, setStart] = useState(false);
   const [adjBtn, setAdjBtn] = useState(true);
   const [charge, setCharge] = useState(0);
-  const [startBtnTxt, setStartBtnTxt] = useState("시작하기");
+  const [startBtnTxt, setStartBtnTxt] = useState('시작하기');
   const [value, setValue] = useState(30);
   const [scrollPosition, setScrollPosition] = useState({ x: 0, y: 0 });
   const [circlePo, setCirclePo] = useState(-50);
   const [circleTouched, setCircleTouched] = useState(false);
-  const [mainColor, setMainColor] = useState("#6100FF");
+  const [mainColor, setMainColor] = useState('');
   const [duringTime, setDuringTime] = useState(0); // 소요시간
-  const [startTxt, setStartTxt] = useState("");
+  const [startTxt, setStartTxt] = useState('');
   const [workSpace, setWorkSpace] = useState([]);
   const [schedule, setSchedule] = useState([]);
-  const [wage, setWage] = useState("");
+  const [wage, setWage] = useState('');
   const [isTouched, setIsTouched] = useState(Array(days.length).fill(false));
   const [selectedDayIndex, setSelectedDayIndex] = useState([]);
-  const [name, setName] = useState("");
+  const [name, setName] = useState('');
   const [selectedBusiness, setSelectedBusiness] = useState(0);
   const [workSpaceId, setWorkSpaceId] = useState(0);
   const [time1, setTime1] = useState(null);
@@ -153,15 +153,27 @@ export default function MainDemo({ navigation }) {
     useCallback(() => {
       const checkLogin = async () => {
         if (await getItemFromAsync("accessToken")) {
-          getUserInfo();
-          getWorkSpace();
+          if(startBtnTxt === '시작하기'){
+            getUserInfo();
+            getWorkSpace();
+          }
         } else {
           navigation.replace("Home");
         }
       };
       checkLogin();
-    }, [modalVisible]),
+      setStartBtnTxt('시작하기');
+    }, [startBtnTxt])
   );
+
+  useState(() => {
+    if (startBtnTxt === '시작하기' || startBtnTxt === '퇴근하기') {
+      setMainColor('#6100FF');
+    }
+    if (startBtnTxt === '카드받기') {
+      setMainColor("#FFAF15");
+    }
+  }, [startBtnTxt]);
 
   const [workDt, setWorkDt] = useState("");
   const [startTime, setStartTime] = useState("");
@@ -205,8 +217,13 @@ export default function MainDemo({ navigation }) {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisible2, setModalVisible2] = useState(false);
 
+  const openModal = () => {
+    setModalVisible(true);
+  }
+
   const closeModal = () => {
     setModalVisible(false);
+    getWorkSpace();
   };
 
   const closeModal2 = () => {
@@ -234,9 +251,9 @@ export default function MainDemo({ navigation }) {
   const finishWork = () => {
     setRunning1(false);
     setRunning2(false);
-    setMainColor("#FFAF15");
+    // setMainColor("#FFAF15");
     setStartBtnTxt("카드받기");
-    setStartTxt(" 오늘의 \n 알바 완료!");
+    setStartTxt("오늘의 \n알바 완료!");
     createWorkHistory();
   }
 
@@ -256,7 +273,7 @@ export default function MainDemo({ navigation }) {
       }, 1000); // 타이머가 duringTime에 맞춰 charge를 채우도록 설정
 
       if (charge > 260) {
-        finishWork();
+        setRunning1(false);
       }
     } else {
       BackgroundTimer.clearInterval(interval);
@@ -365,14 +382,7 @@ export default function MainDemo({ navigation }) {
         },
         {
           text: "퇴근",
-          onPress: () => {
-            setMainColor("#FFAF15");
-            setStartBtnTxt("카드받기");
-            setStartTxt("오늘의 \n알바 완료!");
-            // setEndTime(getTime());
-            createWorkHistory();
-          },
-          color: "#6100FF",
+          onPress: finishWork
         },
       ],
       { cancelable: false },
@@ -385,7 +395,7 @@ export default function MainDemo({ navigation }) {
       randNum: Math.floor(Math.random() * 9) + 1,
     });
     if (response.status === 200) {
-      navigation.navigate("Card", { hours: totalTime });
+      navigation.navigate("Card", { hours: totalTime, resetStatus });
       setAfterCard(true);
     }
   };
@@ -433,7 +443,6 @@ export default function MainDemo({ navigation }) {
   const [update, setUpdated] = useState(false);
 
   const handleSchedule = async () => {
-    console.error(selectedBusiness);
     const response = await request.patch("/workspaces/update", {
       workspaceId: workSpace.workspaceId.toString(),
       name: (name !== workSpace.name ? name : workSpace.name).toString(),
@@ -442,7 +451,6 @@ export default function MainDemo({ navigation }) {
       scheduleList: await handleTime(),
     });
     if (response.status === 200) {
-      console.log(response.data)
       closeModal();
     }
   };
@@ -498,6 +506,14 @@ export default function MainDemo({ navigation }) {
     );
   };
 
+  const startWork = () => {
+    setRunning1(true);
+    setRunning2(true);
+    setStartTime(getTime());
+    setStartBtnTxt("퇴근하기");
+    setStartTxt(randomTxt(selectedBusiness)._j);
+  }
+
   const resetStatus = () => {
     setStart(false);
     setAdjBtn(true);
@@ -505,7 +521,7 @@ export default function MainDemo({ navigation }) {
     setRunning1(false);
     setRunning2(false);
 
-    setMainColor("#6100FF");
+    // setMainColor("#6100FF");
     setStartBtnTxt("시작하기");
     setStartTxt(nick + "님, \n오늘의 근무를 \n시작하세요");
 
@@ -611,10 +627,7 @@ export default function MainDemo({ navigation }) {
           //flex: 1,
           //justifyContent: "flex-end",
         }}
-        //onPress={()=>{setStart(true)}}
-        onPress={() => {
-          setModalVisible(true);
-        }}
+        onPress={openModal}
         disabled={!adjBtn}>
         <Text
           style={{
@@ -631,21 +644,18 @@ export default function MainDemo({ navigation }) {
           backgroundColor: mainColor,
         }}
         onPress={() => {
-          startBtnTxt == "시작하기" ? setRunning1(true) : setRunning1(false);
-          startBtnTxt == "시작하기" ? setRunning2(true) : setRunning2(false);
-          startBtnTxt == "시작하기" && setStartTime(getTime());
-          startBtnTxt == "시작하기" && changeTxt();
           setStart(true);
           setAdjBtn(false);
-          startBtnTxt == "퇴근하기" && showAlert();
-          startBtnTxt == "카드받기" && createCard();
-          startBtnTxt == "카드받기" && afterCard == false && resetStatus();
-        }}>
+          startBtnTxt === '시작하기' && startWork();
+          startBtnTxt === '퇴근하기' && showAlert();
+          startBtnTxt === '카드받기' && createCard();
+        }}
+        >
         <Text style={styles.submit}>{startBtnTxt}</Text>
       </StartBtn>
       <SettingBtn
         onPress={() => {
-          navigation.navigate("Setting");
+          navigation.navigate("Setting", { running1, resetStatus });
         }}>
         <Image source={settingBtn} style={{ width: 40, height: 40 }} />
       </SettingBtn>
@@ -654,7 +664,7 @@ export default function MainDemo({ navigation }) {
         animationType="slide"
         transparent={true}
         visible={modalVisible}
-        onRequestClose={closeModal}>
+        onRequestClose={() => closeModal}>
         <View
           style={styles.modalContainer}
           // contentContainerStyle={{justifyContent: "center", alignItems: "center",}}
@@ -681,10 +691,10 @@ export default function MainDemo({ navigation }) {
                     marginBottom: 20,
                     padding: 15,
                   }}>
-                  <TouchableOpacity style={{ flex: 1 }} onPressOut={closeModal}>
+                  <TouchableOpacity style={{ flex: 1, alignItems: 'flex-start' }} onPress={closeModal}>
                     <Image source={erase} />
                   </TouchableOpacity>
-                  <TouchableOpacity onPressOut={handleSchedule}>
+                  <TouchableOpacity style={{flex: 1, alignItems: 'flex-end'}} onPress={handleSchedule}>
                     <Image style={{ width: 25, height: 25 }} source={checked} />
                   </TouchableOpacity>
                 </View>

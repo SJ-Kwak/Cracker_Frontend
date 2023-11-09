@@ -48,7 +48,7 @@ export default function LoginScreen({ navigation }) {
       setItemToAsync("password", values.password);
       navigation.replace("Main");
     } else {
-      Alert.alert("로그인에 실패하셨습니다.");
+      Alert.alert("아이디 혹은 비밀번호가 틀렸습니다.");
     }
   };
 

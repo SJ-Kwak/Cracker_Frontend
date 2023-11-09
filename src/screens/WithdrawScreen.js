@@ -34,9 +34,10 @@ const signupSchema = yup.object().shape({
     .oneOf([yup.ref("password")], "비밀번호가 일치하지 않습니다"),
 });
 
-export default function WithdrawScreen({ navigation }) {
+export default function WithdrawScreen({ navigation, route }) {
   const [under, setUnder] = useState("#CCCCCC");
   var password = "";
+  const { resetStatus } = route.params;
   const request = new Request();
   useEffect(() => {
     const getPassword = async () => {
@@ -48,7 +49,7 @@ export default function WithdrawScreen({ navigation }) {
   const withdraw = async () => {
     const response = await request.patch("/accounts/withdraw");
     if (response.status === 200) {
-      Alert.alert(response.data);
+      resetStatus();
       await clearItemsFromAsync();
       navigation.navigate("Home");
     } else {

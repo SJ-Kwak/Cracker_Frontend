@@ -16,9 +16,10 @@ const CardScreen = ({ navigation, route }) => {
   //     navigation.navigate("CardPick", { hours: route.params.hours });
   //   }, 5000);
   // }, []);
+  const { hours, resetStatus } = route.params;
   useFocusEffect(useCallback(() => {
     setTimeout(() => {
-      navigation.navigate("CardPick", { hours: route.params.hours });
+      navigation.navigate("CardPick", { hours: hours, resetStatus });
     }, 5000);
   }, []));
 

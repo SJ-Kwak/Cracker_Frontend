@@ -24,12 +24,12 @@ export default function CardPickScreen({ navigation, route }) {
     { name: "하늘에서", source: require("../assets/cards/Star.png") },
     { name: "파블로프의", source: require("../assets/cards/Abocado.png") },
   ];
-
+  const { hours, resetStatus } = route.params;
   const [selectedPhoto, setSelectedPhoto] = useState(null);
   const [index, setIndex] = useState(0);
   const [times, setTimes] = useState("");
   const [workTime, setWorkTime] = useState(
-    route.params.hours.toFixed(1) + "시간",
+    hours.toFixed(1) + "시간",
   );
   const xBtn = require("../assets/tch_btnX.png");
   const request = new Request();
@@ -38,13 +38,10 @@ export default function CardPickScreen({ navigation, route }) {
   const { width, height } = Dimensions.get('window')
 
   function extractNumberWithUnit(sentence) {
-    // 정규 표현식. 실수, 단위 명사 추출
-    const match = sentence.match(/(\d+(?:\.\d+)?)\s*(.+)/);
-
+    const match = sentence.includes('치킨') ? sentence.match(/(\d+\.\d+)\s*(.{2})/) : sentence.match(/(\d+\.\d+)\s*(.+)/);
     if (match) {
-      // 문자열로 병합
-      const number = Number(match[1]).toFixed(2);
-      const unit = match[2].charAt(0);
+      const number = Number(match[1]).toFixed(1);
+      const unit = sentence.includes('치킨') ? match[2] : match[2].charAt(0);
       return `${number}${unit}`;
     } else {
       return null;
@@ -75,7 +72,7 @@ export default function CardPickScreen({ navigation, route }) {
           width: 30,
           height: 30,
         }}
-        onPress={() => navigation.replace("Main")}>
+        onPress={() => {resetStatus; navigation.replace("Main")}}>
         <Image source={xBtn} style={{ width: 30, height: 30 }} />
       </TouchableOpacity>
       <Text
