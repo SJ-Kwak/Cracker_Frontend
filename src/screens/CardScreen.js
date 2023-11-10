@@ -11,11 +11,6 @@ const Stack = createStackNavigator();
 const CardView = require("../assets/CardView.gif");
 
 const CardScreen = ({ navigation, route }) => {
-  // useEffect(() => {
-  //   setTimeout(() => {
-  //     navigation.navigate("CardPick", { hours: route.params.hours });
-  //   }, 5000);
-  // }, []);
   const { hours, resetStatus } = route.params;
   useFocusEffect(useCallback(() => {
     setTimeout(() => {
@@ -25,7 +20,7 @@ const CardScreen = ({ navigation, route }) => {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-      <FastImage source={CardView} style={{alignSelf: "center", width: '100%', height: '100%'}} />
+      <FastImage source={CardView} style={{alignSelf: "center", width: '90%', height: '100%'}} />
     </SafeAreaView>
   );
 };

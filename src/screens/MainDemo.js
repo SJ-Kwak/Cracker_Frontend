@@ -51,16 +51,18 @@ const categories = [
 ];
 
 export default function MainDemo({ navigation }) {
+  const getInitialColor = () => { return '#6100FF'; }
+  const getInitialTxt = () => { return '시작하기'; }
   const [start, setStart] = useState(false);
   const [adjBtn, setAdjBtn] = useState(true);
   const [charge, setCharge] = useState(0);
-  const [startBtnTxt, setStartBtnTxt] = useState('시작하기');
+  const [startBtnTxt, setStartBtnTxt] = useState(getInitialTxt);
   const [value, setValue] = useState(30);
   const [scrollPosition, setScrollPosition] = useState({ x: 0, y: 0 });
   const [circlePo, setCirclePo] = useState(-50);
   const [circleTouched, setCircleTouched] = useState(false);
-  const [mainColor, setMainColor] = useState('');
-  const [duringTime, setDuringTime] = useState(0); // 소요시간
+  const [mainColor, setMainColor] = useState(getInitialColor);
+  const [duringTime, setDuringTime] = useState(5); // 소요시간
   const [startTxt, setStartTxt] = useState('');
   const [workSpace, setWorkSpace] = useState([]);
   const [schedule, setSchedule] = useState([]);
@@ -153,7 +155,7 @@ export default function MainDemo({ navigation }) {
     useCallback(() => {
       const checkLogin = async () => {
         if (await getItemFromAsync("accessToken")) {
-          if(startBtnTxt === '시작하기'){
+          if(!start){
             getUserInfo();
             getWorkSpace();
           }
@@ -162,18 +164,17 @@ export default function MainDemo({ navigation }) {
         }
       };
       checkLogin();
-      setStartBtnTxt('시작하기');
-    }, [startBtnTxt])
+    }, [start])
   );
 
-  useState(() => {
-    if (startBtnTxt === '시작하기' || startBtnTxt === '퇴근하기') {
-      setMainColor('#6100FF');
-    }
-    if (startBtnTxt === '카드받기') {
-      setMainColor("#FFAF15");
-    }
-  }, [startBtnTxt]);
+  // useState(() => {
+  //   setStartBtnTxt(startBtnTxt);
+  // }, [startBtnTxt])
+
+  // useState(() => {
+  //   setMainColor(mainColor);
+  // }, [mainColor])
+  
 
   const [workDt, setWorkDt] = useState("");
   const [startTime, setStartTime] = useState("");
@@ -241,8 +242,6 @@ export default function MainDemo({ navigation }) {
       console.log('foreground 전환');
     } else {
       console.log('background 전환');
-      setRunning1(true);
-      setRunning2(true);
     }
 
     appState.current = nextAppState;
@@ -251,7 +250,7 @@ export default function MainDemo({ navigation }) {
   const finishWork = () => {
     setRunning1(false);
     setRunning2(false);
-    // setMainColor("#FFAF15");
+    setMainColor("#FFAF15");
     setStartBtnTxt("카드받기");
     setStartTxt("오늘의 \n알바 완료!");
     createWorkHistory();
@@ -282,7 +281,7 @@ export default function MainDemo({ navigation }) {
       appStateListener.remove();
       BackgroundTimer.clearInterval(interval);
     }
-  }, [appState.current, running1, running2, charge, duringTime]);
+  }, [appState.current, running1, charge]);
 
   useEffect(() => {
     const appStateListener = AppState.addEventListener('change', handleAppStateChange);
@@ -301,7 +300,7 @@ export default function MainDemo({ navigation }) {
       appStateListener.remove();
       BackgroundTimer.clearInterval(interval);
     }
-  }, [appState.current, running1, running2, time, duringTime]);
+  }, [appState.current, running2, time]);
 
   const scrollViewRef = useRef(null);
 
@@ -398,11 +397,6 @@ export default function MainDemo({ navigation }) {
       navigation.navigate("Card", { hours: totalTime, resetStatus });
       setAfterCard(true);
     }
-  };
-
-  const changeTxt = () => {
-    setStartBtnTxt("퇴근하기");
-    setStartTxt(randomTxt(selectedBusiness)._j);
   };
 
   const handleBusinessSelection = business => {
@@ -521,7 +515,7 @@ export default function MainDemo({ navigation }) {
     setRunning1(false);
     setRunning2(false);
 
-    // setMainColor("#6100FF");
+    setMainColor("#6100FF");
     setStartBtnTxt("시작하기");
     setStartTxt(nick + "님, \n오늘의 근무를 \n시작하세요");
 
