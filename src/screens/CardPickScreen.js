@@ -94,11 +94,11 @@ export default function CardPickScreen({ navigation, route }) {
           <ImageBackground source={selectedPhoto} style={{ width: width, height: height * 0.8}}>
             <Text
               style={{
-                fontSize: 24,
+                fontSize: 28,
                 fontWeight: "600",
                 color: "#6100FF",
-                marginTop: 150,
-                marginLeft: 90
+                marginTop: '43%',
+                marginLeft: '20%'
               }}>
               {times}
             </Text>

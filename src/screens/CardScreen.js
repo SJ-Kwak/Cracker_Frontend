@@ -1,7 +1,5 @@
-import React, { Component } from "react";
 import styled from "styled-components/native";
-
-import { StyleSheet, Text, View, Image, SafeAreaView } from "react-native";
+import { SafeAreaView } from "react-native";
 import { useState, useEffect, useCallback } from "react";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useFocusEffect } from "@react-navigation/native";
@@ -19,8 +17,8 @@ const CardScreen = ({ navigation, route }) => {
   }, []));
 
   return (
-    <SafeAreaView style={{ flex: 1, backgroundColor: "white" }}>
-      <FastImage source={CardView} style={{alignSelf: "center", width: '90%', height: '100%'}} />
+    <SafeAreaView style={{ flex: 1, backgroundColor: "white", width: '100%', alignItems: 'center', justifyContent: 'center' }}>
+      <FastImage source={CardView} resizeMode="contain" style={{width: '120%', height: '100%'}} />
     </SafeAreaView>
   );
 };
