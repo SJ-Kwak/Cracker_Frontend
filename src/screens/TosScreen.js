@@ -31,15 +31,15 @@ export default function TosScreen({ navigation, route }) {
   const [isChecked2, setChecked2] = useState(false);
   const [isChecked3, setChecked3] = useState(false);
 
-  const link1 = () => {
+  const policyService = () => {
     Linking.openURL(
-      "https://cracker-policy.notion.site/302754ad2f7c4ee99e41003d0d0e3eaa"
+      "https://cracker-policy-1.notion.site/f660b546fe964802865a87782771f36c"
     );
   };
 
-  const link2 = () => {
+  const policyPrivacy = () => {
     Linking.openURL(
-      "https://cracker-policy.notion.site/0454026d73314249bdf652816ac46280"
+      "https://cracker-policy-1.notion.site/e1c340d117774e67a03a07a6b3c53b6e"
     );
   };
 
@@ -115,7 +115,7 @@ export default function TosScreen({ navigation, route }) {
         </View>
         <View style={{ height: 25 }} />
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Text style={styles.agree} onPress={link1}>서비스 이용약관(필수)</Text>
+          <Text style={styles.agree} onPress={policyService}>서비스 이용약관(필수)</Text>
           <CheckBox
             style={{
               position: "absolute",
@@ -136,7 +136,7 @@ export default function TosScreen({ navigation, route }) {
         </View>
         <View style={{ height: 25 }} />
         <View style={{ flexDirection: "row", alignItems: "center" }}>
-          <Text style={styles.agree} onPress={link2}>개인정보 수집 및 이용 동의(필수)</Text>
+          <Text style={styles.agree} onPress={policyPrivacy}>개인정보 수집 및 이용 동의(필수)</Text>
           <CheckBox
             style={{
               position: "absolute",

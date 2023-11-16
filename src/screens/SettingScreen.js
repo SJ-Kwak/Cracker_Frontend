@@ -37,15 +37,15 @@ export default function SettingScreen({ navigation, route }) {
   );
   const {running1, resetStatus} = route.params;
 
-  const link1 = () => {
+  const policyService = () => {
     Linking.openURL(
-      "https://cracker-policy-1.notion.site/e1c340d117774e67a03a07a6b3c53b6e"
+      "https://cracker-policy-1.notion.site/f660b546fe964802865a87782771f36c"
     );
   };
 
-  const link2 = () => {
+  const policyPrivacy = () => {
     Linking.openURL(
-      "https://cracker-policy.notion.site/0454026d73314249bdf652816ac46280"
+      "https://cracker-policy-1.notion.site/e1c340d117774e67a03a07a6b3c53b6e"
     );
   };
 
@@ -110,8 +110,8 @@ export default function SettingScreen({ navigation, route }) {
       >
         닉네임 수정하기
       </Text>
-      <Text style={styles.menu} onPress={link2}>개인정보처리방침</Text>
-      <Text style={styles.menu} onPress={link1}>서비스 이용약관</Text>
+      <Text style={styles.menu} onPress={policyPrivacy}>개인정보처리방침</Text>
+      <Text style={styles.menu} onPress={policyService}>서비스 이용약관</Text>
       <Text style={styles.menu} onPress={() => {}}>오픈 소스 라이선스</Text>
       <Text style={styles.menu} onPress={() => navigation.navigate("Withdraw", { resetStatus })}>회원 탈퇴하기</Text>
       <Text style={styles.menu} onPress={logoutConfirmAlert}>로그아웃</Text>
