@@ -112,7 +112,7 @@ export default function SettingScreen({ navigation, route }) {
       </Text>
       <Text style={styles.menu} onPress={policyPrivacy}>개인정보처리방침</Text>
       <Text style={styles.menu} onPress={policyService}>서비스 이용약관</Text>
-      <Text style={styles.menu} onPress={() => {}}>오픈 소스 라이선스</Text>
+      {/* <Text style={styles.menu} onPress={() => {}}>오픈 소스 라이선스</Text> */}
       <Text style={styles.menu} onPress={() => navigation.navigate("Withdraw", { resetStatus })}>회원 탈퇴하기</Text>
       <Text style={styles.menu} onPress={logoutConfirmAlert}>로그아웃</Text>
     </Wrapper>
