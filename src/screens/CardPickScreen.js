@@ -97,7 +97,7 @@ export default function CardPickScreen({ navigation, route }) {
                 fontSize: 28,
                 fontWeight: "600",
                 color: "#6100FF",
-                marginTop: '43%',
+                marginTop: '40%',
                 marginLeft: '20%'
               }}>
               {times}

@@ -164,6 +164,7 @@ export default function MainDemo({ navigation }) {
         }
       };
       checkLogin();
+      // console.log(schedule[0].startTime);
     }, [start])
   );
 
@@ -182,11 +183,17 @@ export default function MainDemo({ navigation }) {
 
   const getTime = () => {
     const currentDate = new Date();
-    const year = currentDate.getFullYear();
-    const month = String(currentDate.getMonth() + 1).padStart(2, "0"); // 월은 0부터 시작하므로 1을 더함
-    const day = String(currentDate.getDate()).padStart(2, "0");
-    const hours = String(currentDate.getHours()).padStart(2, "0");
-    const minutes = String(currentDate.getMinutes()).padStart(2, "0");
+
+    // 한국 시간 기준으로 조정
+    const koreaTimeOffset = 9 * 60; // 9시간 차이
+    const koreaTime = new Date(currentDate.getTime() + koreaTimeOffset * 60 * 1000);
+
+    const year = koreaTime.getFullYear();
+    const month = (koreaTime.getMonth() + 1).toString().padStart(2, '0');
+    const day = koreaTime.getDate().toString().padStart(2, '0');
+
+    const hours = koreaTime.getHours().toString().padStart(2, '0');
+    const minutes = koreaTime.getMinutes().toString().padStart(2, '0');
 
     const formattedDate = `${year}-${month}-${day}`;
     const formattedTime = `${hours}${minutes}`;
@@ -210,8 +217,12 @@ export default function MainDemo({ navigation }) {
   };
 
   const convertToMinutes = time => {
-    const hours = parseInt(time.slice(0, 2), 10);
-    const minutes = parseInt(time.slice(2), 10);
+    // 시간이 4자리 문자열이 아닌 경우 앞에 0을 추가
+    const formattedTime = time.length === 3 ? `0${time}` : time;
+  
+    const hours = parseInt(formattedTime.slice(0, 2), 10);
+    const minutes = parseInt(formattedTime.slice(2), 10);
+  
     return hours * 60 + minutes;
   };
 
@@ -331,40 +342,42 @@ export default function MainDemo({ navigation }) {
   const [totalTime, setTotalTime] = useState(0);
 
   const createWorkHistory = async () => {
-    // 시작 타임
-    const startMinutes = convertToMinutes(startTime);
-    const endMinutes = convertToMinutes(getTime());
-
-    const _start = convertToMinutes(
-      convertTime(time1).substr(0, 2).concat(convertTime(time1).substr(2, 2)),
-    );
-    const _end = convertToMinutes(
-      convertTime(time2).substr(0, 2).concat(convertTime(time2).substr(2, 2)),
-    );
+    // 새로운 시간
+    let start = schedule[0].startTime;
+    let end = schedule[0].endTime
+    let startMinutes = convertToMinutes(schedule[0].startTime.toString());
+    let endMinutes = convertToMinutes(schedule[0].endTime.toString());
+    // 예정과 다른 시간에 버튼을 눌렀다면 getTime 함수로 시간을 가져옴
+    if (parseInt(startTime) !== parseInt(schedule[0].startTime)) {
+      startMinutes = convertToMinutes(startTime);
+      start = startTime;
+    }
+    if (parseInt(getTime()) !== parseInt(schedule[0].endTime)) {
+      endMinutes = convertToMinutes(getTime());
+      end = getTime();
+    }
 
     // 임금 계산
     const totalHours = (endMinutes - startMinutes) / 60;
-    const _totalHours = (_end - _start) / 60;
-    setTotalTime(totalHours !== _totalHours ? totalHours : _totalHours);
+    setTotalTime(totalHours);
+
     const totalWage = totalHours * workSpace.wage;
-    const _totalWage = _totalHours * workSpace.wage;
-    const response = await request.post("/history", {
-      workspaceId: workSpace.workspaceId,
-      workDt: workDt,
-      startTime:
-        parseInt(startTime) !== parseInt(time1)
-          ? parseInt(startTime)
-          : parseInt(time1),
-      endTime:
-        parseInt(getTime()) !== parseInt(time2)
-          ? parseInt(getTime())
-          : parseInt(time2),
-      totalWage: totalWage <= _totalWage ? totalWage : _totalWage,
-    });
-    const response_get = await request.get("/history");
-    setWorkHistoryId(
-      response_get.data[response_get.data.length - 1].workHistoryId,
-    );
+    console.log(start, end, totalWage);
+    try {
+      const response = await request.post("/history", {
+        workspaceId: workSpace.workspaceId,
+        workDt: workDt,
+        startTime: start,
+        endTime: end,
+        totalWage: totalWage,
+      });
+      const response_get = await request.get("/history");
+      setWorkHistoryId(
+        response_get.data[response_get.data.length - 1].workHistoryId,
+      );
+    } catch (err) {
+      console.error(err)
+    }
   };
 
   const showAlert = () => {

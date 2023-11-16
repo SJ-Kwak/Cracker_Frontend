@@ -39,7 +39,7 @@ export default function SettingScreen({ navigation, route }) {
 
   const link1 = () => {
     Linking.openURL(
-      "https://cracker-policy.notion.site/302754ad2f7c4ee99e41003d0d0e3eaa"
+      "https://cracker-policy-1.notion.site/e1c340d117774e67a03a07a6b3c53b6e"
     );
   };
 
